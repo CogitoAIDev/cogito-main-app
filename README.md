@@ -1,0 +1,2 @@
+# CogitoApp
+Main monolith app
