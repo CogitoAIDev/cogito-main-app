@@ -19,7 +19,7 @@ cursor = conn.cursor()
 for _ in range(10000, 100000):
     cursor.execute(
         "INSERT INTO users (userName, userTelegramId) VALUES (%s, %s)",
-        (fake.name(), fake.uuid4())
+        (fake.name(), fake.urandom_int(min=100000000, max=999999999))
     )
 
 model_sizes = [128, 256, 512]
