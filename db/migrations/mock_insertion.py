@@ -16,10 +16,22 @@ conn = psycopg2.connect(
 conn.autocommit = True
 cursor = conn.cursor()
 
-for _ in range(10000, 100000):
+# Set to keep track of used Telegram Chat IDs
+used_telegram_ids = set()
+
+for _ in range(0, 100000):
+    while True:
+        # Generate a potentially unique Telegram Chat ID
+        potential_id = fake.random_int(min=100000000, max=999999999)
+        # Check if it's not already used
+        if potential_id not in used_telegram_ids:
+            used_telegram_ids.add(potential_id)
+            break
+
+    # Insert the user with the guaranteed unique Telegram Chat ID
     cursor.execute(
-        "INSERT INTO users (userName, userTelegramId) VALUES (%s, %s)",
-        (fake.name(), fake.urandom_int(min=100000000, max=999999999))
+        "INSERT INTO users (userName, userTelegramChatId) VALUES (%s, %s)",
+        (fake.name(), potential_id)
     )
 
 model_sizes = [128, 256, 512]
