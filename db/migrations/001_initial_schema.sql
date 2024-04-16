@@ -1,7 +1,7 @@
 CREATE TABLE users (
     userId SERIAL PRIMARY KEY,
     userName VARCHAR NOT NULL,
-    userTelegramСChatId INTEGER UNIQUE
+    userTelegramChatId INTEGER UNIQUE
 );
 
 
