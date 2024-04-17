@@ -27,11 +27,13 @@ class UserGoals:
             "description": description,
             "status": status,
             "motivationLevel": motivation_level,
+            # Add field for short analysis from LLM of how user working towards this
+            # Add parental goal tracking
             "importance": importance,
             "dueDate": due_date.isoformat(),
             "createdDate": datetime.now().isoformat(),
             "updatedDate": datetime.now().isoformat(),
-            "progressTracking": {
+            "progressTracking": { # Change format, to track totalSteps be all steps user were given, completedSteps be all steps user completed, remainingSteps (skipedSteps) be all steps user have left
                 "totalSteps": 0,
                 "completedSteps": 0,
                 "remainingSteps": 0

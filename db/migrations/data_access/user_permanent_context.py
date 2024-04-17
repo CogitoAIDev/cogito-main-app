@@ -10,6 +10,8 @@ class UserPermanentContext:
         Validate the context data against the required schema, ensuring all necessary fields are present and correctly formatted.
         """
         required_structures = {
+            # add user backstory/description field
+            # preffered voice tone (formal, informal, etc)
             "lifestylePreferences": ("preferredTimeOfDay", "activityType"),
             "motivationalTriggers": ("bestMotivators", "energyPeaks"),
             "personalNotes": None,  # This will just check for the presence of an empty list or initialized structure
