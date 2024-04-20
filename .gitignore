@@ -1,2 +1,9 @@
+.DS_Store
+
 api/venv/
 api/__pycache__/
+api/test.db
+api/db/__pycache__/
+api/dto/__pycache__/
+api/handlers/crud/__pycache__/
+api/models/__pycache__/
