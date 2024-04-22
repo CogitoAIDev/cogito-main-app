@@ -8,61 +8,74 @@ class UserGoalsDB:
     @staticmethod
     @contextmanager
     def get_db_cursor():
-        conn, cursor = DatabaseConnectionPool.get_connection_with_cursor()
         try:
-            yield cursor
-        except Exception as e:
-            conn.rollback()
-            raise Exception(f"Error: {e}")
-        else:
-            conn.commit()
+            conn, cursor = DatabaseConnectionPool.get_connection_with_cursor()
+            try:
+                yield cursor
+            except Exception as e:
+                conn.rollback()
+                raise Exception(f"Database operation failed: {e}") from e
+            else:
+                conn.commit()
         finally:
             cursor.close()
             DatabaseConnectionPool.put_connection(conn)
 
     @staticmethod
     def create_goal(user_id: int, goal_data: dict):
-        UserGoalsValidator.validate_goal_data(user_id, goal_data)
-        goal_data['createdDate'] = datetime.now().isoformat()
-        goal_data['updatedDate'] = datetime.now().isoformat()
-        goal_data.setdefault('progressTracking', {"totalSteps": 0, "completedSteps": 0, "skippedSteps": 0})
+        try:
+            UserGoalsValidator.validate_goal_data(user_id, goal_data)
+            goal_data['createdDate'] = datetime.now().isoformat()
+            goal_data['updatedDate'] = datetime.now().isoformat()
+            goal_data.setdefault('progressTracking', {"totalSteps": 0, "completedSteps": 0, "skippedSteps": 0})
 
-        with UserGoalsDB.get_db_cursor() as cursor:
-            cursor.execute("""
-                INSERT INTO user_goals (userId, goalDetails) VALUES (%s, %s) RETURNING goalId;
-            """, (user_id, Json(goal_data)))
-            goal_id = cursor.fetchone()[0]
-            return goal_id
+            with UserGoalsDB.get_db_cursor() as cursor:
+                cursor.execute("""
+                    INSERT INTO user_goals (userId, goalDetails) VALUES (%s, %s) RETURNING goalId;
+                """, (user_id, Json(goal_data)))
+                goal_id = cursor.fetchone()[0]
+                return goal_id
+        except Exception as e:
+            raise Exception(f"Failed to create goal: {e}") from e
 
     @staticmethod
     def update_goal_detail(goal_id, key, value):
-        UserGoalsValidator.validate_key_value(key, value)
-        with UserGoalsDB.get_db_cursor() as cursor:
-            json_path = f"{{{key}}}"
-            json_value = Json(value)
-            cursor.execute("""
-                UPDATE user_goals
-                SET goalDetails = jsonb_set(goalDetails, %s::text[], %s, true)
-                WHERE goalId = %s;
-            """, ([json_path], json_value, goal_id))
+        try:
+            UserGoalsValidator.validate_key_value(key, value)
+            with UserGoalsDB.get_db_cursor() as cursor:
+                json_path = f"{{{key}}}"
+                json_value = Json(value)
+                cursor.execute("""
+                    UPDATE user_goals
+                    SET goalDetails = jsonb_set(goalDetails, %s::text[], %s, true)
+                    WHERE goalId = %s;
+                """, ([json_path], json_value, goal_id))
+        except Exception as e:
+            raise Exception(f"Failed to update goal detail: {e}") from e
 
     @staticmethod
     def get_goal_detail(goal_id, key):
-        with UserGoalsDB.get_db_cursor() as cursor:
-            cursor.execute("""
-                SELECT goalDetails -> %s FROM user_goals WHERE goalId = %s;
-            """, (key, goal_id))
-            result = cursor.fetchone()
-            return result[0] if result else None
+        try:
+            with UserGoalsDB.get_db_cursor() as cursor:
+                cursor.execute("""
+                    SELECT goalDetails -> %s FROM user_goals WHERE goalId = %s;
+                """, (key, goal_id))
+                result = cursor.fetchone()
+                return result[0] if result else None
+        except Exception as e:
+            raise Exception(f"Failed to retrieve goal detail: {e}") from e
 
     @staticmethod
     def delete_goal_detail(goal_id, key):
-        with UserGoalsDB.get_db_cursor() as cursor:
-            cursor.execute("""
-                UPDATE user_goals
-                SET goalDetails = goalDetails - %s
-                WHERE goalId = %s;
-            """, (key, goal_id))
+        try:
+            with UserGoalsDB.get_db_cursor() as cursor:
+                cursor.execute("""
+                    UPDATE user_goals
+                    SET goalDetails = goalDetails - %s
+                    WHERE goalId = %s;
+                """, (key, goal_id))
+        except Exception as e:
+            raise Exception(f"Failed to delete goal detail: {e}") from e
 
 
 class UserGoalsValidator:
