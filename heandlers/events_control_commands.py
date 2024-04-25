@@ -1,20 +1,14 @@
-'''Events
-/reg_event "userName" "telegramChatId:int"
-/get_event "id:int"
-/get_events #100 первых
-/update_event "id" {}
-/delete_event "id:int"'''
 from aiogram import types
 from aiogram import Router
 from aiogram.filters import Command
 
-from filters import admin_commands_filters
+from filters import user_control_filters
 
 router = Router()
 
 #############################################################################################
 
-@router.message(admin_commands_filters.RegEventFilter_command())
+@router.message(user_control_filters.RegEventFilter_command())
 async def reg_new_event(message: types.Message):
     regSuccess = False
 
@@ -35,7 +29,7 @@ async def reg_event_command(message: types.Message):
 
 #############################################################################################
 
-@router.message(admin_commands_filters.GetEventsFilter_command())
+@router.message(user_control_filters.GetEventsFilter_command())
 async def get_events(message: types.Message):
 
     eventsList = []
@@ -58,7 +52,7 @@ async def get_events_command(message: types.Message):
 
 #############################################################################################
 
-@router.message(admin_commands_filters.GetEventFilter_command())
+@router.message(user_control_filters.GetEventFilter_command())
 async def get_event(message: types.Message):
 
     event = ''
@@ -77,7 +71,7 @@ async def get_event_command(message: types.Message):
 #############################################################################################
 
 
-@router.message(admin_commands_filters.DeleteEventFilter_command())
+@router.message(user_control_filters.DeleteEventFilter_command())
 async def delete_event(message: types.Message):
 
     '''
@@ -95,7 +89,7 @@ async def delete_event_command(message: types.Message):
 
 
 
-@router.message(admin_commands_filters.UpdateEventFilter_command())
+@router.message(user_control_filters.UpdateEventFilter_command())
 async def update_event(message: types.Message):
 
     '''

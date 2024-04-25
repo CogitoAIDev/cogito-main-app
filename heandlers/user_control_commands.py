@@ -2,17 +2,13 @@ from aiogram import types
 from aiogram import Router
 from aiogram.filters import Command
 
-from filters import admin_commands_filters
+from filters import user_control_filters
 
 router = Router()
 
 #############################################################################################
 
-@router.message(admin_commands_filters.ErrorRegFilter_command())
-async def error_reg_new_user(message: types.Message):
-    await message.answer('Неверный синтаксис команды. Повторите повторно по шаблону (без кавычек):\n/reg_user "ID"')
-
-@router.message(admin_commands_filters.RegFilter_command())
+@router.message(user_control_filters.RegUserFilter_command())
 async def reg_new_user(message: types.Message):
     regSuccess = False
 
@@ -33,11 +29,7 @@ async def reg_command(message: types.Message):
 
 #############################################################################################
 
-@router.message(admin_commands_filters.ErrorGetUsers_command())
-async def error_get_users(message: types.Message):
-    await message.answer('Неверный синтаксис команды. Повторите повторно по шаблону (без кавычек):\n/get_users')
-
-@router.message(admin_commands_filters.GetUsersFilter_command())
+@router.message(user_control_filters.GetUsersFilter_command())
 async def get_users(message: types.Message):
 
     usersList = []
@@ -53,21 +45,12 @@ async def get_users(message: types.Message):
 
     await message.answer(resultMessage)
 
-
-@router.message(Command(commands=['get_users']))
-async def get_users_command(message: types.Message):
-    await message.answer('Выполните запрос по шаблону (без кавычек):\n/get_users')
-
 #############################################################################################
 
-@router.message(admin_commands_filters.ErrorGetUser_command())
-async def error_get_user(message: types.Message):
-    await message.answer('Неверный синтаксис команды. Повторите повторно по шаблону (без кавычек):\n/get_user "id:int"')
-
-@router.message(admin_commands_filters.GetUserFilter_command())
+@router.message(user_control_filters.GetUserFilter_command())
 async def get_user(message: types.Message):
 
-    user = ''
+    user = 'Информация о пользователе:\n'
 
     '''
     TODO: Add get_user logic
@@ -81,11 +64,7 @@ async def get_user_command(message: types.Message):
 
 #############################################################################################
 
-@router.message(admin_commands_filters.ErrorDeleteUser_command())
-async def error_delete_user(message: types.Message):
-    await message.answer('Неверный синтаксис команды. Повторите повторно по шаблону (без кавычек):\n/delete_user "id:int"')
-
-@router.message(admin_commands_filters.DeleteUserFilter_command())
+@router.message(user_control_filters.DeleteUserFilter_command())
 async def delete_user(message: types.Message):
 
     '''
@@ -100,11 +79,7 @@ async def delete_user_command(message: types.Message):
 
 #############################################################################################
 
-@router.message(admin_commands_filters.ErrorUpdateUser_command())
-async def error_update_user(message: types.Message):
-    await message.answer('Неверный синтаксис команды. Повторите повторно по шаблону (без кавычек):\n/update_user "id:int" "name"')
-
-@router.message(admin_commands_filters.UpdateUserFilter_command())
+@router.message(user_control_filters.UpdateUserFilter_command())
 async def update_user(message: types.Message):
 
     '''

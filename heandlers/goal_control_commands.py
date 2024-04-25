@@ -2,13 +2,13 @@ from aiogram import types
 from aiogram import Router
 from aiogram.filters import Command
 
-from filters import admin_commands_filters
+from filters import user_control_filters
 
 router = Router()
 
 #############################################################################################
 
-@router.message(admin_commands_filters.GetGoalFilter_command())
+@router.message(user_control_filters.GetGoalFilter_command())
 async def get_goal(message: types.Message):
 
     goal = ''
@@ -24,7 +24,7 @@ async def get_goal_command(message: types.Message):
 
 #############################################################################################
 
-@router.message(admin_commands_filters.DeleteGoalFilter_command())
+@router.message(user_control_filters.DeleteGoalFilter_command())
 async def delete_goal(message: types.Message):
 
     '''

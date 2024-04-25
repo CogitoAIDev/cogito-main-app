@@ -2,14 +2,14 @@ from aiogram import types
 from aiogram import Router
 from aiogram.filters import Command
 
-from filters import admin_commands_filters
+from filters import user_control_filters
 
 router = Router()
 
 #############################################################################################
 
 # Добавление новых команд для UserContext
-@router.message(admin_commands_filters.GetContextFilter_command())
+@router.message(user_control_filters.GetContextFilter_command())
 async def get_context(message: types.Message):
 
     context = ''
@@ -25,7 +25,7 @@ async def get_context_command(message: types.Message):
 
 #############################################################################################
 
-@router.message(admin_commands_filters.DeleteContextFilter_command())
+@router.message(user_control_filters.DeleteContextFilter_command())
 async def delete_context(message: types.Message):
 
     '''

@@ -2,13 +2,13 @@ from aiogram import types
 from aiogram import Router
 from aiogram.filters import Command
 
-from filters import admin_commands_filters
+from filters import user_control_filters
 
 router = Router()
 
 #############################################################################################
 
-@router.message(admin_commands_filters.LLMGenerateFilter_command())
+@router.message(user_control_filters.LLMGenerateFilter_command())
 async def LLM_generate(message: types.Message):
 
     result = ''
