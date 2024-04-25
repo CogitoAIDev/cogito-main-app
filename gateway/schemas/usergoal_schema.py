@@ -1,0 +1,13 @@
+from pydantic import BaseModel
+
+
+class UserGoalBase(BaseModel): ...
+
+
+class UserGoalCreateDTO(UserGoalBase): ...
+
+
+class UserGoalUpdateDTO(UserGoalBase): ...
+
+
+class UserGoalResponseDTO(UserGoalBase): ...

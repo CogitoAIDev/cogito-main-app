@@ -1,0 +1,13 @@
+from pydantic import BaseModel
+
+
+class UserContextBase(BaseModel): ...
+
+
+class UserContextCreateDTO(UserContextBase): ...
+
+
+class UserContextUpdateDTO(UserContextBase): ...
+
+
+class UserContextResponseDTO(UserContextBase): ...

@@ -18,10 +18,10 @@ services:
       - back
 
   controller:
-    image: controller
-    container_name: cogito_controller
+    image: controllers
+    container_name: cogito_controllers
     build:
-      context: ./controller
+      context: ./controllers
       dockerfile: Dockerfile
     ports:
       - 8001:8001

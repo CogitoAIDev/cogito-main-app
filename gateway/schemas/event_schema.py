@@ -1,0 +1,13 @@
+from pydantic import BaseModel
+
+
+class UserEventBase(BaseModel): ...
+
+
+class UserEventCreateDTO(UserEventBase): ...
+
+
+class UserEventUpdateDTO(UserEventBase): ...
+
+
+class UserEventResponseDTO(UserEventBase): ...
