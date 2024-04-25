@@ -17,11 +17,11 @@ services:
       - reverse-proxy
       - back
 
-  controller:
-    image: controller
-    container_name: cogito_controller
+  repositories:
+    image: repositories
+    container_name: cogito_repositories
     build:
-      context: ./controller
+      context: ./repositories
       dockerfile: Dockerfile
     ports:
       - 8001:8001
