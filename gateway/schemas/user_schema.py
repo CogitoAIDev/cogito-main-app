@@ -4,10 +4,10 @@ from typing import Optional
 
 class UserBase(BaseModel):
     name: str
+
+
+class UserCreateDTO(UserBase):
     tg_chat_id: int
-
-
-class UserCreateDTO(UserBase): ...
 
 
 class UserUpdateDTO(UserBase):
