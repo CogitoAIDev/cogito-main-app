@@ -1,1 +1,5 @@
 .env
+.conda
+.DS_Store
+/db/.DS_Store
+/db/data_access/__pycache__/
