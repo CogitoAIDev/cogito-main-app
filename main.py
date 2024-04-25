@@ -1,9 +1,15 @@
 import asyncio
 import logging
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from aiogram import Bot, Dispatcher
 
-from heandlers import unknown_commands
+from heandlers import (
+    unknown_commands,
+    user_control_commands,
+    )
 
 import os
 
@@ -13,7 +19,9 @@ async def start_polling():
     dp = Dispatcher()
 
     dp.include_routers(
-        unknown_commands.router,
+        user_control_commands.router,
+
+        unknown_commands.router
         )
 
     await bot.delete_webhook()

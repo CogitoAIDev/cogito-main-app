@@ -1,0 +1,118 @@
+from aiogram import types
+from aiogram import Router
+from aiogram.filters import Command
+
+from filters import admin_commands_filters
+
+router = Router()
+
+#############################################################################################
+
+@router.message(admin_commands_filters.ErrorRegFilter_command())
+async def error_reg_new_user(message: types.Message):
+    await message.answer('Неверный синтаксис команды. Повторите повторно по шаблону (без кавычек):\n/reg_user "ID"')
+
+@router.message(admin_commands_filters.RegFilter_command())
+async def reg_new_user(message: types.Message):
+    regSuccess = False
+
+    '''
+    TODO: Add registration logic
+    '''
+
+    if regSuccess:
+        await message.answer('Регистрация прошла успешно')
+    else:
+        await message.answer('Регистрация не удалась')
+
+
+
+@router.message(Command(commands=['reg_user']))
+async def reg_command(message: types.Message):
+    await message.answer('Выполните запрос по шаблону (без кавычек):\n/reg_user "ID"')
+
+#############################################################################################
+
+@router.message(admin_commands_filters.ErrorGetUsers_command())
+async def error_get_users(message: types.Message):
+    await message.answer('Неверный синтаксис команды. Повторите повторно по шаблону (без кавычек):\n/get_users')
+
+@router.message(admin_commands_filters.GetUsersFilter_command())
+async def get_users(message: types.Message):
+
+    usersList = []
+
+    '''
+    TODO: Add get_users logic
+    '''
+
+    resultMessage = 'Список пользователей:\n'
+
+    for users in usersList:
+        resultMessage = resultMessage + users + '\n'
+
+    await message.answer(resultMessage)
+
+
+@router.message(Command(commands=['get_users']))
+async def get_users_command(message: types.Message):
+    await message.answer('Выполните запрос по шаблону (без кавычек):\n/get_users')
+
+#############################################################################################
+
+@router.message(admin_commands_filters.ErrorGetUser_command())
+async def error_get_user(message: types.Message):
+    await message.answer('Неверный синтаксис команды. Повторите повторно по шаблону (без кавычек):\n/get_user "id:int"')
+
+@router.message(admin_commands_filters.GetUserFilter_command())
+async def get_user(message: types.Message):
+
+    user = ''
+
+    '''
+    TODO: Add get_user logic
+    '''
+
+    await message.answer(user)
+
+@router.message(Command(commands=['get_user']))
+async def get_user_command(message: types.Message):
+    await message.answer('Выполните запрос по шаблону (без кавычек):\n/get_user "id:int"')
+
+#############################################################################################
+
+@router.message(admin_commands_filters.ErrorDeleteUser_command())
+async def error_delete_user(message: types.Message):
+    await message.answer('Неверный синтаксис команды. Повторите повторно по шаблону (без кавычек):\n/delete_user "id:int"')
+
+@router.message(admin_commands_filters.DeleteUserFilter_command())
+async def delete_user(message: types.Message):
+
+    '''
+    TODO: Add delete_user logic
+    '''
+
+    await message.answer('Пользователь успешно удален')
+
+@router.message(Command(commands=['delete_user']))
+async def delete_user_command(message: types.Message):
+    await message.answer('Выполните запрос по шаблону (без кавычек):\n/delete_user "id:int"')
+
+#############################################################################################
+
+@router.message(admin_commands_filters.ErrorUpdateUser_command())
+async def error_update_user(message: types.Message):
+    await message.answer('Неверный синтаксис команды. Повторите повторно по шаблону (без кавычек):\n/update_user "id:int" "name"')
+
+@router.message(admin_commands_filters.UpdateUserFilter_command())
+async def update_user(message: types.Message):
+
+    '''
+    TODO: Add update_user logic
+    '''
+
+    await message.answer('Пользователь успешно обновлен')
+
+@router.message(Command(commands=['update_user']))
+async def update_user_command(message: types.Message):
+    await message.answer('Выполните запрос по шаблону (без кавычек):\n/update_user "id:int" "name"')
