@@ -1,0 +1,89 @@
+version: "3.8"
+services:
+  gateway:
+    image: gateway
+    container_name: cogito_gateway
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - 7333:7333
+    environment:
+      - VIRTUAL_HOST=back.cogitodev.org
+      - LETSENCRYPT_HOST=back.cogitodev.org
+      - VIRTUAL_PORT=7333
+      - PORT=7333
+    networks:
+      - reverse-proxy
+      - back
+
+  controller:
+    image: controller
+    container_name: cogito_controller
+    build:
+      context: ./controller
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8001
+    networks:
+      - back
+
+  app:
+    image: app
+    container_name: cogito_app
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    networks:
+      - back
+
+  telegram:
+    image: telegram
+    container_name: cogito_telegram
+    build:
+      context: ./client/telegram
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    networks:
+      - reverse-proxy
+
+  middleware:
+    image: middleware
+    container_name: cogito_middleware
+    build:
+      context: ./middleware
+      dockerfile: Dockerfile
+    ports:
+      - 8002:8002
+    networks:
+      - back
+
+  db:
+    image: db
+    container_name: cogito_db
+    restart: always
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./db/initpg.sh:/docker-entrypoint-initdb.d/initpg.sh
+    networks:
+      - back
+
+networks:
+  reverse-proxy:
+    external:
+      name: reverse-proxy
+  back:
+    driver: bridge
+
+volumes:
+  db:
