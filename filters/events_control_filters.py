@@ -2,23 +2,21 @@ from aiogram.filters import Filter
 from aiogram.types import Message
 
 from lib import filter_functions
-    
 
-
-
-class RegUserFilter_command(Filter):
+class RegEventFilter_command(Filter):
 
     def _get_args(self, text: str) -> dict:
         listOfArgs = text.split()
 
-        if listOfArgs[0] != '/reg_user':
+        if listOfArgs[0] != '/reg_event':
             return None
 
         if len(listOfArgs) != 2:
             return None
 
         dictOfArgs = {'command': listOfArgs[0],
-                    'userID': listOfArgs[1]}
+                    'userName': listOfArgs[1],
+                    'ID': listOfArgs[2]}
             
         return dictOfArgs
 
@@ -31,28 +29,23 @@ class RegUserFilter_command(Filter):
             return False
 
         try:
-            return filter_functions.is_may_be_int(dictOfArgs['userID'])
+            return filter_functions.is_may_be_int(dictOfArgs['ID'])
         except:
             return False
-    
-class GetUsersFilter_command(Filter):
-    async def __call__(self, message: Message) -> bool:
-
-        return message.text == '/get_users'
-    
-class GetUserFilter_command(Filter):
-
+        
+class GetEventFilter_command(Filter):
     def _get_args(self, text: str) -> dict:
         listOfArgs = text.split()
 
-        if listOfArgs[0] != '/get_user':
+        if listOfArgs[0] != '/get_events':
             return None
+
 
         if len(listOfArgs) != 2:
             return None
 
         dictOfArgs = {'command': listOfArgs[0],
-                    'userID': listOfArgs[1]}
+                    'userName': listOfArgs[1]}
             
         return dictOfArgs
 
@@ -62,56 +55,37 @@ class GetUserFilter_command(Filter):
         if not dictOfArgs:
             return False
 
-
         try:
-            return filter_functions.is_may_be_int(dictOfArgs['userID'])
+            return filter_functions.is_may_be_int(dictOfArgs['ID'])
         except:
             return False
-    
-class DeleteUserFilter_command(Filter):
-
-    def _get_args(self, text: str) -> dict:
-        listOfArgs = text.split()
-
-        if listOfArgs[0] != '/delete_user':
-            return None
-
-        if len(listOfArgs) != 2:
-            return None
-
-        dictOfArgs = {'command': listOfArgs[0],
-                    'userID': listOfArgs[1]}
-            
-        return dictOfArgs
-
+        
+class GetEventsFilter_command(Filter):
     async def __call__(self, message: Message) -> bool:
-        dictOfArgs = self._get_args(message.text)
 
-        if not dictOfArgs:
-            return False
-
-
-        try:
-            return filter_functions.is_may_be_int(dictOfArgs['userID'])
-        except:
-            return False
+        return message.text == '/get_events'
     
-class UpdateUserFilter_command(Filter):
+class UpdateEventFilter_command(Filter):
 
     def _get_args(self, text: str) -> dict:
         listOfArgs = text.split()
 
-        if listOfArgs[0] != '/update_user':
+        if listOfArgs[0] != '/update_event':
             return None
 
-        if len(listOfArgs) != 3:
+
+        if len(listOfArgs) <= 2:
             return None
 
         dictOfArgs = {'command': listOfArgs[0],
-                    'userID': listOfArgs[1],
-                    'name': listOfArgs[2]}
+                    'ID': listOfArgs[1],
+                    'event': ''}
+        
+        for arg in listOfArgs[2:]:
+            dictOfArgs['event'] = dictOfArgs['event'] + ' ' + arg    
             
         return dictOfArgs
+    
 
     async def __call__(self, message: Message) -> bool:
         dictOfArgs = self._get_args(message.text)
@@ -121,6 +95,33 @@ class UpdateUserFilter_command(Filter):
         
 
         try:
-            return filter_functions.is_may_be_int(dictOfArgs['userID'])
+            return filter_functions.is_may_be_int(dictOfArgs['ID']) and filter_functions.is_may_be_dict(dictOfArgs['event'])
+        except:
+            return False
+        
+
+class DeleteEventFilter_command(Filter):
+    def _get_args(self, text: str) -> dict:
+        listOfArgs = text.split()
+
+        if listOfArgs[0] != '/delete_event':
+            return None
+
+        if len(listOfArgs) != 2:
+            return None
+
+        dictOfArgs = {'command': listOfArgs[0],
+                    'ID': listOfArgs[1]}
+            
+        return dictOfArgs
+    
+    async def __call__(self, message: Message) -> bool:
+        dictOfArgs = self._get_args(message.text)
+
+        if not dictOfArgs:
+            return False
+
+        try:
+            return filter_functions.is_may_be_int(dictOfArgs['ID'])
         except:
             return False

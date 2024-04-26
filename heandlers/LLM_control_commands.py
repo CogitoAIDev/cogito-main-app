@@ -2,16 +2,16 @@ from aiogram import types
 from aiogram import Router
 from aiogram.filters import Command
 
-from filters import user_control_filters
+from filters import LLM_control_filters
 
 router = Router()
 
 #############################################################################################
 
-@router.message(user_control_filters.LLMGenerateFilter_command())
+@router.message(LLM_control_filters.GenerateLLMFilter_command())
 async def LLM_generate(message: types.Message):
 
-    result = ''
+    result = 'Ответ:\n'
 
     '''
     TODO: Add LLM_generate logic
@@ -20,6 +20,6 @@ async def LLM_generate(message: types.Message):
     await message.answer(result)
 
 
-@router.message(Command(commands=['LLM_generate']))
+@router.message(Command(commands=['generate']))
 async def LLM_generate_command(message: types.Message):
-    await message.answer('Выполните запрос по шаблону (без кавычек):\nLLM_generate "текст"')
+    await message.answer('Выполните запрос по шаблону (без кавычек):\n/generate "текст"')

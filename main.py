@@ -9,6 +9,10 @@ from aiogram import Bot, Dispatcher
 from heandlers import (
     unknown_commands,
     user_control_commands,
+    events_control_commands,
+    goal_control_commands,
+    LLM_control_commands,
+    context_control_commands
     )
 
 import os
@@ -20,6 +24,10 @@ async def start_polling():
 
     dp.include_routers(
         user_control_commands.router,
+        events_control_commands.router,
+        goal_control_commands.router,
+        LLM_control_commands.router,
+        context_control_commands.router,
 
         unknown_commands.router
         )
