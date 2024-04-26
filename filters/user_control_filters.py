@@ -14,11 +14,12 @@ class RegUserFilter_command(Filter):
         if listOfArgs[0] != '/reg_user':
             return None
 
-        if len(listOfArgs) != 2:
+        if len(listOfArgs) != 3:
             return None
 
         dictOfArgs = {'command': listOfArgs[0],
-                    'userID': listOfArgs[1]}
+                    'name': listOfArgs[1],
+                    'telegramChatID': listOfArgs[2]}
             
         return dictOfArgs
 
@@ -31,7 +32,7 @@ class RegUserFilter_command(Filter):
             return False
 
         try:
-            return filter_functions.is_may_be_int(dictOfArgs['userID'])
+            return filter_functions.is_may_be_int(dictOfArgs['telegramChatID']) and len(dictOfArgs['name']) > 2
         except:
             return False
     

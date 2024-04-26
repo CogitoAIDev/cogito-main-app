@@ -25,7 +25,7 @@ async def reg_new_user(message: types.Message):
 
 @router.message(Command(commands=['reg_user']))
 async def reg_command(message: types.Message):
-    await message.answer('Выполните запрос по шаблону (без кавычек):\n/reg_user "ID"')
+    await message.answer('Выполните запрос по шаблону (без кавычек):\n/reg_user "name" "telgramChatID"')
 
 #############################################################################################
 
