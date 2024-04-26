@@ -1,5 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Json
 from typing import Optional
+
+from app.usercontext import usercontext_schema
 
 
 class UserBase(BaseModel):
@@ -15,4 +17,5 @@ class UserUpdateDTO(UserBase):
 
 
 class UserResponseDTO(UserBase):
+    usercontext: Optional[Json] = None
     id: int

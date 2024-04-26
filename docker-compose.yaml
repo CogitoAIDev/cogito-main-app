@@ -13,11 +13,13 @@ services:
       - LETSENCRYPT_HOST=back.cogitodev.org
       - VIRTUAL_PORT=7333
       - PORT=7333
+
+      - APP_URL=http://cogito_app:8000
     networks:
       - reverse-proxy
       - back
 
-  controller:
+  controllers:
     image: controllers
     container_name: cogito_controllers
     build:
@@ -36,6 +38,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8000:8000
+    environment:
+      - REPOSITORY_URL=http://cogito_repositories:8001
     networks:
       - back
 

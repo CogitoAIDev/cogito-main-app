@@ -25,7 +25,7 @@ async def find_userevent_by_id(userevent_id: int):
     try:
         return await userevent_service.find_userevent_by_id(userevent_id)
     except ValueError:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="UserEvent not found")
 
 
 @userevent_router.put(
@@ -37,7 +37,7 @@ async def update_userevent(
     try:
         return await userevent_service.update_userevent(user_id, updated_user)
     except ValueError:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="UserEvent not found")
 
 
 @userevent_router.delete(
@@ -47,4 +47,4 @@ async def delete_userevent(user_id: int):
     try:
         return await userevent_service.delete_userevent(user_id)
     except ValueError:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="UserEvent not found")
