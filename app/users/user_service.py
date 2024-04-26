@@ -1,4 +1,4 @@
-from app.schemas import user_schema
+from app.users import user_schema
 
 
 async def register_user(user: user_schema.UserCreateDTO):

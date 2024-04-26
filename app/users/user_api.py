@@ -1,8 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
 
-from app.schemas import user_schema
-from app.services import user_service
+from app.users import user_service, user_schema
 
 
 user_router = APIRouter()
