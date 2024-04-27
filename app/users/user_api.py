@@ -35,14 +35,21 @@ async def find_user_by_id(
     include_context: bool = Query(
         False, description="Find user with his context details"
     ),
+    include_goals: bool = Query(False, description="Find user with his goals ids"),
 ):
     try:
         user_data = await user_service.find_user_by_id(user_id)
         if include_context:
             user_context = await usercontext_service.find_context_by_user_id(user_id)
-            print(user_context)
             user_data.usercontext = user_context.json()
+
+        if include_goals:
+            user_data.usergoal_ids = await user_service.find_user_goals_by_user_id(
+                user_id
+            )
+
         return user_data
+
     except ValueError as e:
         logging.error(e)
         raise HTTPException(status_code=404, detail="User not found")

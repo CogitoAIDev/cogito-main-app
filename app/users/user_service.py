@@ -14,7 +14,7 @@ async def find_users():
 
 
 async def find_user_by_id(user_id: int):
-    if id == 1:
+    if user_id == 1:
         raise ValueError
     return user_schema.UserResponseDTO(name="user1", tg_chat_id=1, id=user_id)
 
@@ -25,3 +25,7 @@ async def update_user(user_id: int, updated_user: user_schema.UserUpdateDTO):
 
 async def delete_user(user_id: int):
     return user_schema.UserResponseDTO(name="user1", tg_chat_id=1, id=user_id)
+
+
+async def find_user_goals_by_user_id(user_id: int):
+    return [1, 2]

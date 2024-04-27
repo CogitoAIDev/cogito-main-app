@@ -38,3 +38,16 @@ async def update_context(
         return user_context
     except ValueError:
         raise HTTPException(status_code=404, detail="UserContext not found")
+
+
+@usercontext_router.delete(
+    "/contexts/{usercontext_id}",
+    response_model=usercontext_schema.UserContextResponseDTO,
+)
+async def delete_context(usercontext_id: int):
+    try:
+        user_context = await usercontext_service.delete_context(usercontext_id)
+        user_context.context = json.dumps(user_context.context)
+        return user_context
+    except ValueError:
+        raise HTTPException(status_code=404, detail="UserContext not found")

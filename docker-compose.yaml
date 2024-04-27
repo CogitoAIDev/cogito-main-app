@@ -40,6 +40,7 @@ services:
       - 8000:8000
     environment:
       - REPOSITORY_URL=http://cogito_repositories:8001
+      - MIDDLEWARE_URL=http://cogito_middleware:8002
     networks:
       - back
 
