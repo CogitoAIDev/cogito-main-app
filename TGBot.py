@@ -4,6 +4,9 @@ import sys
 
 from datetime import datetime
 
+from dotenv import load_dotenv
+import os
+
 from pydantic import BaseModel
 import httpx
 
@@ -15,8 +18,11 @@ from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
+
+load_dotenv()
+
 # Telegram bot token
-TOKEN = "6918195838:AAGLMJv9BasfBFnh3Ji5b8XO46FkNEZ99hs"
+TG_BOT_TOKEN = os.getenv("TG_BOT_TOKEN")
 
 # Dispatcher
 dp = Dispatcher()
@@ -28,7 +34,7 @@ url = "http://localhost:8000/receive_message"
 
 # Initializing bot
 async def main() -> None:
-    bot = Bot(token=TOKEN)
+    bot = Bot(token=TG_BOT_TOKEN)
     await dp.start_polling(bot)
 
 

@@ -2,11 +2,17 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import httpx
 
+from dotenv import load_dotenv
+import os
+
+
+load_dotenv()
+
 # Telegram bot token
-TOKEN = "6918195838:AAGLMJv9BasfBFnh3Ji5b8XO46FkNEZ99hs"
+TG_BOT_TOKEN = os.getenv("TG_BOT_TOKEN")
 
 # TelegramAPI, to which we send messages
-telegram_api_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+telegram_api_url = f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage"
 
 app = FastAPI()
 

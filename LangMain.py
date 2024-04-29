@@ -24,20 +24,26 @@ import asyncio
 import aiofiles
 from typing import Any, Dict, List
 
+from dotenv import load_dotenv
+import os
+
 from langchain.agents.format_scratchpad.openai_tools import format_to_openai_tool_messages
 
-
+load_dotenv()
 
 # Seeting up LangChain logs. https://smith.langchain.com
 LANGCHAIN_TRACING_V2=True
 LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
-LANGCHAIN_API_KEY="ls__ff5aa60aa1d340ff90cda557d380fb28"
+LANGCHAIN_API_KEY=os.getenv("LANGSMITH_API_KEY")
 LANGCHAIN_PROJECT="cogitodev"
 
 
 
+
+
 # Initializing LLM model
-llm3 = ChatOpenAI(api_key="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", temperature=0.2, model='gpt-3.5-turbo-0125')
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+llm3 = ChatOpenAI(api_key=OPENAI_API_KEY, temperature=0.2, model='gpt-3.5-turbo-0125')
 
 
 
