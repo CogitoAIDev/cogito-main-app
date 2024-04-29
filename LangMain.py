@@ -90,8 +90,9 @@ class IncomingMessage:
         tool = AddGoalTool()
         agent = create_tool_calling_agent(llm3, tools= [tool ], prompt=AddingGoalAgentPrompt)
         agent_executor = AgentExecutor(agent=agent, tools= [tool], verbose=True)
-        output = agent_executor.ainvoke({"input": self.text,"user_id": self.user_id, "chat_history": self.history})
-        message = Message(chat_id=self.user_id, text=output)
+        output = await agent_executor.ainvoke({"input": self.text,"user_id": self.user_id, "chat_history": self.history})
+        output_string = output.get("output")
+        message = Message(chat_id=self.user_id, text=output_string)
         await send_message(message)
         
 
@@ -128,7 +129,7 @@ class IncomingMessage:
 async def start(user_id, text):
 
     # we need to get_chat_history here
-    history=  [("human", "hello"), ("ai", "hello")]
+    history=  [("human", "я хочу выучить математику"), ("ai", "To add your new goal of learning mathematics, I need some more information. Could you please provide me with a full description of your goal and under what circumstances you would consider the goal achieved or finished?")]
 
     with IncomingMessage(user_id, text, chat_history=history) as messageInput:
         await messageInput.start_processing()

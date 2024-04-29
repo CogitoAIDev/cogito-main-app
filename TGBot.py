@@ -28,7 +28,7 @@ TG_BOT_TOKEN = os.getenv("TG_BOT_TOKEN")
 dp = Dispatcher()
 
 # URL of our LangChain app. Will change later when langchain app is on server.
-url = "http://localhost:8000/receive_message"
+url = "http://localhost:8100/receive_message"
 
 
 

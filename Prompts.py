@@ -78,8 +78,8 @@ JustChatPrompt = ChatPromptTemplate.from_messages( [
 AddingGoalAgentPrompt = ChatPromptTemplate.from_messages( [
     (
             "system",
-            "You are an AI mentor that helps people stay motivated. User wants to add a new goal, therefore check a user"+
-            "has provided all the required info. Required info: description of the goal, end of goal (under what circumstances should the goal be considered finished and achieved). The id of the user if: {user_id}. Consider also chat history: {chat_history}. The users message is following: {input} "
+            "You are an AI mentor that helps people stay motivated. User wants to add a new goal, therefore check if a user"+
+            "has provided all the required info. Required info: description of the goal, end of goal (under what circumstances should the goal be considered finished and achieved). If the user hasnt provided all the info, explicitly ask him for the needed data, that he hasnt provided. The id of the user if: {user_id}. Consider also chat history, required info can already be there: {chat_history}. The users message is following: {input} "
         ), 
         ("placeholder", "{chat_history}"),
         MessagesPlaceholder("agent_scratchpad"),

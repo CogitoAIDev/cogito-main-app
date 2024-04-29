@@ -1,27 +1,20 @@
-from flask import Flask, request, jsonify
-
-import aiofiles
-import asyncio
+from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse
 
 from LangMain import start
-app = Flask(__name__)
 
+app = FastAPI()
 
-@app.route('/receive_message', methods=['POST'])
-async def receive_message():
+@app.post("/receive_message")
+async def receive_message(request: Request):
     """
-     Receiving messages from Telegram and starting LLM processing,
-
+    Receiving messages from Telegram and starting LLM processing.
     """
-
-    # Getting data json
-    data = request.json
+    # Getting data as JSON
+    data = await request.json()
 
     # Starting LLM processing
     await start(data['chat_id'], data['text'])
 
-    return jsonify({"status": "Success", "message": "Data received"}), 200
+    return JSONResponse(content={"status": "Success", "message": "Data received"}, status_code=status.HTTP_200_OK)
 
-# Starting the programme
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
