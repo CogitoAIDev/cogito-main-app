@@ -10,6 +10,7 @@ class UserBase(BaseModel):
 
 class UserCreateDTO(UserBase):
     tg_chat_id: int
+    usercontext: Optional[Json] = None
 
 
 class UserUpdateDTO(UserBase):

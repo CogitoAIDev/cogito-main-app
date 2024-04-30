@@ -29,13 +29,13 @@ async def find_userevent_by_id(userevent_id: int):
 
 
 @userevent_router.put(
-    "/events/{user_id}", response_model=userevent_schema.UserEventResponseDTO
+    "/events/{userevent_id}", response_model=userevent_schema.UserEventResponseDTO
 )
 async def update_userevent(
-    user_id: int, updated_user: userevent_schema.UserEventUpdateDTO
+    userevent_id: int, updated_user: userevent_schema.UserEventUpdateDTO
 ):
     try:
-        return await userevent_service.update_userevent(user_id, updated_user)
+        return await userevent_service.update_userevent(userevent_id, updated_user)
     except ValueError:
         raise HTTPException(status_code=404, detail="UserEvent not found")
 

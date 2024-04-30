@@ -1,7 +1,10 @@
+import json
+
 from app.users import user_schema
 
 
 async def register_user(user: user_schema.UserCreateDTO):
+    user.usercontext = json.dumps(user.usercontext)
     user = user_schema.UserResponseDTO(**user.dict(), id=1)
     return user
 

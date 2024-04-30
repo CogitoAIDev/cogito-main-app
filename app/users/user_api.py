@@ -11,16 +11,12 @@ user_router = APIRouter()
 
 
 @user_router.post("/users/", response_model=user_schema.UserResponseDTO)
-async def register_user(
-    user: user_schema.UserCreateDTO,
-    include_context: bool = Query(
-        False, description="Create user and return his context details"
-    ),
-):
+async def register_user(user: user_schema.UserCreateDTO):
     user_data = await user_service.register_user(user)
-    user_context = await usercontext_service.create_context_for_user(user_data.id)
-    if include_context:
-        user_data.usercontext = user_context.json()
+    user_context = await usercontext_service.create_context_for_user(
+        user_data.id, user.usercontext
+    )
+    user_data.usercontext = user_context.json()
     return user_data
 
 
