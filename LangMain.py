@@ -27,6 +27,8 @@ from typing import Any, Dict, List
 from dotenv import load_dotenv
 import os
 
+import sys
+
 from langchain.agents.format_scratchpad.openai_tools import format_to_openai_tool_messages
 
 load_dotenv()
@@ -116,7 +118,8 @@ class IncomingMessage:
         Chain1 = FirstStepClassificationPrompt | llm3 | FirstStepParser
         
         output = await Chain1.ainvoke({"input": self.text, "chat_history": self.history, "format_instructions":FirstStepParser.get_format_instructions() })
-        if output.type=='goals': 
+        print(output.type)
+        if output.type=='GOALS': 
             await self.goals_processor()
         else:
             await self.chat_processor()
@@ -129,7 +132,7 @@ class IncomingMessage:
 async def start(user_id, text):
 
     # we need to get_chat_history here
-    history=  [("human", "я хочу выучить математику"), ("ai", "To add your new goal of learning mathematics, I need some more information. Could you please provide me with a full description of your goal and under what circumstances you would consider the goal achieved or finished?")]
+    history=  [("human", "привет!"), ("ai", "привет")]
 
     with IncomingMessage(user_id, text, chat_history=history) as messageInput:
         await messageInput.start_processing()

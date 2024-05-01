@@ -40,7 +40,12 @@ GoalsCLassificationParser = PydanticOutputParser(pydantic_object=GoalsClassifica
 FirstStepClassificationPrompt = ChatPromptTemplate.from_messages( [
     (
             "system",
-            "You are an AI mentor that helps people stay motivated, so you store their goals. You need to decide whether the message you got from the user is about their specific goals, may be they want to add a new goal, or to extract an exisiting one, or whether they just want to chat. Consider chat's history if provided. In the first case return just word goals. In other case return word chat. \n{format_instructions} \n The users message is following: {input} "
+            "You are an AI mentor that helps people stay motivated, so you have acess to their stored goals (global goals which user wants to achieve), events (specific actions, pieces of work user needs to take). You need to take a look at users new message and at chat history."+
+            "Based on the content of the message and the history, you need to classify what you should do. There are following options:" +
+            "1) Just Chat. If person just wants to chat with you, user doesnt want to do something with their goals and their events and you dont need any additional information about the user to answer the users message. In this case return just one word: CHAT" +
+            "2) Do something with users global goals. If you need to have an access to database with stored users goals to answer the message or to save information then choose this option. Examples: user wants to add a new goal; user wants to retrieve their goals; user wants to change their goals; user wants to delete their goal; user wants to discuss precisely their goal. Be careful, goals might seem similar to the next option events, but goals are more global, long-term. In this case return one word: GOALS" +
+            "3) Do something with users events. If you need to have an access to database with stored user events to answer the message or to save information then choose this option. Events are small specific actions user do regularly or not regularly. For example: watch a lecture; attend a conference; finish homework. So user might want to take following actions: add a new event; change current events; change the frequency or timetable of existent events. In this case return one word: EVENTS " + 
+            "{format_instructions} \n The users message is following: {input} "
         ), 
         ("placeholder", "{chat_history}"),
         ("human", "{input}"),
@@ -49,8 +54,8 @@ FirstStepClassificationPrompt = ChatPromptTemplate.from_messages( [
 
 # Object with data that we got from the first step, which decides, what is the main topic of the message
 class FirstStepClassificationObject(BaseModel):
-    type: str = Field(description="Either chat or goals")
-    certainty: float = Field(description="From 0 to 1, how certain are you that you selected the right category for the message?")
+    type: str = Field(description="CHAT, GOALS or EVENTS")
+    certainty: str = Field(description="Fill in how certain are you in your decision: NOT_CERTAIN, HALF_CERTAIN, CERTAIN " )
 
 # Parser for getting this object out of text
 FirstStepParser = PydanticOutputParser(pydantic_object=FirstStepClassificationObject)
