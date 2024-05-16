@@ -5,6 +5,7 @@ from crud.crudEvents import get_event, create_event, update_event, delete_event
 router = APIRouter()
 # TODO: Implement robust error handling
 # TODO: Implement logging
+# TODO
 
 @router.post("/events/", response_model=Event)
 async def create_event_route(event: EventCreate):
