@@ -8,8 +8,11 @@ from langchain.callbacks.manager import (
 
 from typing import Optional, Type
 
+
+#### ADDING GOAL
+
 class AddGoalData(BaseModel):
-    goal_name: str = Field(description="it is the name of the goal")
+    goal_name: str = Field(description="The name of the goal")
     goal_description: str = Field(description="Full description of a goal. Everything that you got from the user.")
     goal_end_state: str = Field(description="What should be done to consider a goal achieved.")
     user_id: int = Field(description="Users id passed by with the context")

@@ -12,6 +12,9 @@ from langchain_core.prompts import MessagesPlaceholder
 from langchain.agents import create_tool_calling_agent
 from langchain.agents import AgentExecutor
 
+import uuid
+
+from langsmith import traceable
 
 from Prompts import GoalsClassificationPrompt, GoalsClassificationObject, GoalsCLassificationParser
 from Prompts import FirstStepClassificationPrompt, FirstStepClassificationObject, FirstStepParser
@@ -22,7 +25,7 @@ from Tools import AddGoalTool
 
 import asyncio
 import aiofiles
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from dotenv import load_dotenv
 import os
@@ -33,12 +36,12 @@ from langchain.agents.format_scratchpad.openai_tools import format_to_openai_too
 
 load_dotenv()
 
-# Seeting up LangChain logs. https://smith.langchain.com
-LANGCHAIN_TRACING_V2=True
-LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
-LANGCHAIN_API_KEY=os.getenv("LANGSMITH_API_KEY")
-LANGCHAIN_PROJECT="cogitodev"
 
+# Seeting up LangChain logs. https://smith.langchain.com
+os.environ["LANGSMITH_TRACING_V2"] = "true"
+os.environ["LANGSMITH_ENDPOINT"] = "https://api.smith.langchain.com"
+os.environ["LANGSMITH_API_KEY"] = os.getenv("LANGSMITH_API_KEY")
+os.environ["LANGSMITH_PROJECT"] = "cogitodev"
 
 
 
@@ -60,7 +63,7 @@ class IncomingMessage:
 
     """
 
-    def __init__(self, user_id, text, chat_history):
+    def __init__(self, user_id: int, text: str, chat_history: list[Tuple[str, str]]):
         self.user_id = user_id
         self.text = text
         self.history = chat_history
@@ -99,25 +102,24 @@ class IncomingMessage:
         
 
 
-
-
+    
     async def chat_processor(self):
          
         # Just Chat chain
         ChainJustChat = JustChatPrompt | llm3
-
-        output = await ChainJustChat.ainvoke({"input": self.text, "chat_history": self.history})
+        config = {"metadata": {"conversation_id": str(uuid.uuid4())}}
+        output = await ChainJustChat.ainvoke({"input": self.text, "chat_history": self.history}, config=config)
         message = Message(chat_id=self.user_id, text=output.content)
         await send_message(message)
 
     
-
+    
     async def start_processing(self):
 
         # First Step Classification chain
         Chain1 = FirstStepClassificationPrompt | llm3 | FirstStepParser
         
-        output = await Chain1.ainvoke({"input": self.text, "chat_history": self.history, "format_instructions":FirstStepParser.get_format_instructions() })
+        output = await Chain1.ainvoke({"input": self.text, "chat_history": self.history, "format_instructions":FirstStepParser.get_format_instructions() }, config={"metadata": {"session_id": self.user_id }})
         print(output.type)
         if output.type=='GOALS': 
             await self.goals_processor()
@@ -126,13 +128,23 @@ class IncomingMessage:
 
         
 
+
+async def get_chat_history(user_id: int, number_of_messages: int) -> list[Tuple[str, str]]:
+    """
+    Getting chat_history for cash.
+    Parameters:
+        user_id (int): User's tg chat id, same as the user_id in the DB.
+        number_of_messages (int): Number of messages to retrieve from the chat
+
+    """
+    return [("human", "привет!"), ("ai", "привет")]
         
 
+
 # Starting the LLM process
-async def start(user_id, text):
+async def start(user_id: int, text: str):
 
-    # we need to get_chat_history here
-    history=  [("human", "привет!"), ("ai", "привет")]
+    history = await get_chat_history(user_id, 15)
 
-    with IncomingMessage(user_id, text, chat_history=history) as messageInput:
+    with IncomingMessage(user_id = user_id, text = text, chat_history=history) as messageInput:
         await messageInput.start_processing()

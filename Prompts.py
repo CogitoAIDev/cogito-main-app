@@ -34,6 +34,7 @@ GoalsCLassificationParser = PydanticOutputParser(pydantic_object=GoalsClassifica
 
 
 
+
 #### FIRST STEP CLASSFICATION 
 
 # Prompt for first step
@@ -63,6 +64,7 @@ FirstStepParser = PydanticOutputParser(pydantic_object=FirstStepClassificationOb
 
 
 
+
 #### JUST CHAT
 
 # Prompt for just chat
@@ -77,6 +79,7 @@ JustChatPrompt = ChatPromptTemplate.from_messages( [
 )
 
 
+
 #### ADDING GOAL AGENT
 
 # Prompt for adding goal agent
@@ -85,6 +88,22 @@ AddingGoalAgentPrompt = ChatPromptTemplate.from_messages( [
             "system",
             "You are an AI mentor that helps people stay motivated. User wants to add a new goal, therefore check if a user"+
             "has provided all the required info. Required info: description of the goal, end of goal (under what circumstances should the goal be considered finished and achieved). If the user hasnt provided all the info, explicitly ask him for the needed data, that he hasnt provided. The id of the user if: {user_id}. Consider also chat history, required info can already be there: {chat_history}. The users message is following: {input} "
+        ), 
+        ("placeholder", "{chat_history}"),
+        MessagesPlaceholder("agent_scratchpad"),
+        ("human", "{input}"),
+]
+)
+
+
+#### ADDING EVENT AGENT
+
+# Prompt for adding event agent
+AddingGoalAgentPrompt = ChatPromptTemplate.from_messages( [
+    (
+            "system",
+            "You are an AI mentor that helps people stay motivated. User wants to add a new event (specific actions, pieces of work user needs to take), therefore check if a user"+
+            "has provided all the required info. Required info: description of the event, frequency of this event (one-time event, regular event, regular event for some time of period, etc.) and timetable of this event (when should this event be executed) . If the user hasnt provided all the info, explicitly ask him for the needed data, that he hasnt provided. The id of the user if: {user_id}. Consider also chat history, required info can already be there: {chat_history}. The users message is following: {input} "
         ), 
         ("placeholder", "{chat_history}"),
         MessagesPlaceholder("agent_scratchpad"),
